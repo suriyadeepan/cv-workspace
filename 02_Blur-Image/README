@@ -2,7 +2,9 @@ Expt by Selvakumar - 24/09/2012
   Loads a image and perform blur operation over the image 
 Modified by RPS Deepan - 29/12/2012
   Gets the blur level as input from user
-	runs this in a loop
+   runs this in a loop
+    puts the text Blur level: <level> in the image
+     saves image to blurred.jpg
 
 
 * cvStartWindowThread();
@@ -10,3 +12,16 @@ Modified by RPS Deepan - 29/12/2012
  - starts the window thread...
  - is necessary to destroy window...
  - [http://stackoverflow.com/questions/7139968/trying-to-close-opencv-window-has-no-effect]
+
+* cvInitFont();
+
+ - inits CvFont object
+ - cvPutText() puts text into image
+ - [http://nashruddin.com/OpenCV_Examples_Part_2]
+
+* sprintf();
+ 
+ - sprintf(s_blur_level, "%d", blur_level) ;
+    
+    write integer "blur_level" to String 
+     s_blur_level

@@ -3,7 +3,10 @@ Expt by Selvakumar - 24/09/2012
   Loads a image and perform blur operation over the image 
 Modified by RPS Deepan - 29/12/2012
   Gets the blur level as input from user
-	runs this in a loop
+   runs this in a loop
+    puts the text Blur level: <level> in the image
+     saves image to blurred.jpg
+
 */
 
 #include <stdio.h>	// For printf()
