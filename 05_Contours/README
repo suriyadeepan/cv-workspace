@@ -1,0 +1,9 @@
+Code copied from [aishack.in]
+[http://www.aishack.in/2010/01/an-introduction-to-contours/]
+
+Modified by RPS Deepan- 29/12/2012
+  Loads an image - detects the contours in it
+  	  draws rectangles over the input image
+  	  	  and displays as output
+
+
