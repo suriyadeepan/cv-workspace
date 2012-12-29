@@ -4,7 +4,8 @@ Code copied from [aishack.in]
 
 Modified by RPS Deepan- 29/12/2012
   Loads an image - detects the contours in it
-  	  draws rectangles over the input image
+   selects quadrilateral type contours
+  	  draws indicating lines on the input image
   	  	  and displays as output
 
 */
@@ -51,35 +52,58 @@ IplImage* contourDetect(IplImage** img)
 	 cvFindContours(temp,storage, &contours,sizeof(CvContour),CV_RETR_LIST,
 		        CV_CHAIN_APPROX_SIMPLE, cvPoint(5,5));
 
-
-
-	// print total num. of contours
-	 printf("\ncontours->total = %d\n", contours->total);
-
+	 // iterate thro' all the contours
 	 while(contours)
 	 {
 
+	 /*
+	  * get the points joining a contour
+	  *  and store the points in result
+	  */
 	 result = cvApproxPoly(contours, sizeof(CvContour),
 			 storage, CV_POLY_APPROX_DP,
 			 cvContourPerimeter(contours)*0.02, 0);
 
+	 /*
+	  * if num. of points is 4 (ie) quadrilateral
+	  *  get the points and draw 4 lines to connect
+	  *   the points to form a quadrilateral...
+	  *
+	  */
 	 	 if(result->total==4)
 	     {
 	             CvPoint *pt[4];
+
+	             /*
+	              * iterate thro' the seq element
+	              *  to get the 4 points
+	              */
 	             for(i=0;i<4;i++)
 	                 pt[i] = (CvPoint*)cvGetSeqElem(result, i);
 
 
-	             cvLine(ret,*pt[0], *pt[1], cvScalar(255),1,8,0);
-
-	             //cvLine(ret, *pt[0], *pt[1], CV_RGB(255,));
-	             cvLine(ret, *pt[1], *pt[2], cvScalar(255));
-	             cvLine(ret, *pt[2], *pt[3], cvScalar(255));
-	             cvLine(ret, *pt[3], *pt[0], cvScalar(255));
+	             /*
+	              * draw line connecting adjacent points
+	              */
+	             cvLine(ret, *pt[0], *pt[1], CV_RGB(0,255,0),1,8,0);
+	             cvLine(ret, *pt[1], *pt[2], CV_RGB(0,255,0),1,8,0);
+	             cvLine(ret, *pt[2], *pt[3], CV_RGB(0,255,0),1,8,0);
+	             cvLine(ret, *pt[3], *pt[0], CV_RGB(0,255,0),1,8,0);
 	     }
 
-
+	 	 /*
+	 	  * go to next contour
+	 	  */
+	 	contours = contours->h_next;
 	 }
+
+	 /*
+	  * release temp image and
+	  *  release storage space...
+	  */
+	 cvReleaseImage(&temp);
+     cvReleaseMemStorage(&storage);
+
 
 	 // return image "ret"
 	return ret;
@@ -109,8 +133,9 @@ int main(int argc, char* argv[])
 
 	// the method contourDetect()
 	//  detect all contours and
-	//   draws them on to a copy of src
-	//    and returns it
+	//   selects quad type contours
+	//    draws them on to a copy of src
+	//     and returns it
 	contourDrawn = contourDetect(&src);
 
 	// a window to display original source image
