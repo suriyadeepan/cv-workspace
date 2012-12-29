@@ -70,7 +70,7 @@ IplImage* contourDetect(IplImage** img)
 	  *   the points to form a quadrilateral...
 	  *
 	  */
-	 	 if(result->total==4)
+	 	 if(result->total==4 && fabs(cvContourArea(result, CV_WHOLE_SEQ,0))>20)
 	     {
 	             CvPoint *pt[4];
 
