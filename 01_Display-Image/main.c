@@ -4,29 +4,24 @@
 
 int main(int argc, char* argv[])
 {
-	// Open the file "lena.jpg".
+	// Open the file "01.jpg".
 	IplImage* img = cvLoadImage("01.jpg", CV_LOAD_IMAGE_UNCHANGED);
 	if (!img) {
 		printf("Error: Could not open the image file! \n");
 		exit(1);
 	}
 
-	// Blur the image.
-	//	cvSmooth(img, img, CV_GAUSSIAN,11,0,0,0);
 
-	// Save the blurred image to a file.
-	//	cvSaveImage("blurred.jpg", img,0);
-
-	// Show the blurred image on the screen.
-	cvNamedWindow("Blurred", CV_WINDOW_AUTOSIZE);
-	cvShowImage("Blurred", img);
+	// Show the image on the screen.
+	cvNamedWindow("Sample Image", CV_WINDOW_AUTOSIZE);
+	cvShowImage("Sample Image", img);
 
 	// Wait for the user to press something on the graphical window.
 	// Note: cvWaitKey() is needed for time to draw on the screen.
 	cvWaitKey(0);
 
 	// Free the resources.
-	cvDestroyWindow("Blurred");
+	cvDestroyWindow("Sample Image");
 	cvReleaseImage( &img );
 
 	return 0;
