@@ -72,7 +72,7 @@ IplImage* contourDetect(IplImage** img)
 
 	             cvLine(ret,*pt[0], *pt[1], cvScalar(255),1,8,0);
 
-	             cvLine(ret, *pt[0], *pt[1], CV_RGB(255,));
+	             //cvLine(ret, *pt[0], *pt[1], CV_RGB(255,));
 	             cvLine(ret, *pt[1], *pt[2], cvScalar(255));
 	             cvLine(ret, *pt[2], *pt[3], cvScalar(255));
 	             cvLine(ret, *pt[3], *pt[0], cvScalar(255));
