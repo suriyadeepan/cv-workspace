@@ -63,6 +63,12 @@ int main(int argc, char* argv[])
 
 	cvErode(img, img, NULL,erode_level);
 
+	/*
+	 *
+	 * Similarly, dilation can be perfomed...
+	 * cvDilate(img,img,NULL,erode_level);
+	 *
+	 */
 
 	// write erode_level integer to String
 	sprintf(s_erode_level, "%d", erode_level) ;
