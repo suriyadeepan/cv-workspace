@@ -3,6 +3,12 @@ Code copied from [aishack.in]
 [http://www.aishack.in/2010/01/thresholding/]
 
 Modified by RPS Deepan- 29/12/2012
+	splits the input image into
+	 3 channels and extracts the
+	  red regions alone by thresholding
+	   technique
+
+
 
 
 */
@@ -82,4 +88,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 
-}
+}// end of main
