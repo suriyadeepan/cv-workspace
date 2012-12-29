@@ -21,6 +21,7 @@ Modified by RPS Deepan- 29/12/2012
 //    and returns it
 IplImage* contourDetect(IplImage** img)
 {
+	int i=0;
 
 	// sequence for storing resulting contours
 	CvSeq* contours;
@@ -48,14 +49,37 @@ IplImage* contourDetect(IplImage** img)
 	// find all contours in temp and
 	//  store them in contours
 	 cvFindContours(temp,storage, &contours,sizeof(CvContour),CV_RETR_LIST,
-		        CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
+		        CV_CHAIN_APPROX_SIMPLE, cvPoint(5,5));
+
+
 
 	// print total num. of contours
 	 printf("\ncontours->total = %d\n", contours->total);
 
-	// draw contours over the image "ret"
-	 cvDrawContours(ret, contours, CV_RGB(0,255,0), CV_RGB(0,0,255),
-	         2, 1, 8, cvPoint(0, 0));
+	 while(contours)
+	 {
+
+	 result = cvApproxPoly(contours, sizeof(CvContour),
+			 storage, CV_POLY_APPROX_DP,
+			 cvContourPerimeter(contours)*0.02, 0);
+
+	 	 if(result->total==4)
+	     {
+	             CvPoint *pt[4];
+	             for(i=0;i<4;i++)
+	                 pt[i] = (CvPoint*)cvGetSeqElem(result, i);
+
+
+	             cvLine(ret,*pt[0], *pt[1], cvScalar(255),1,8,0);
+
+	             cvLine(ret, *pt[0], *pt[1], CV_RGB(255,));
+	             cvLine(ret, *pt[1], *pt[2], cvScalar(255));
+	             cvLine(ret, *pt[2], *pt[3], cvScalar(255));
+	             cvLine(ret, *pt[3], *pt[0], cvScalar(255));
+	     }
+
+
+	 }
 
 	 // return image "ret"
 	return ret;
@@ -66,7 +90,7 @@ IplImage* contourDetect(IplImage** img)
 int main(int argc, char* argv[])
 {
 	// load an image from file
-	IplImage* src=cvLoadImage("054.jpeg",CV_LOAD_IMAGE_UNCHANGED);
+	IplImage* src=cvLoadImage("053.jpeg",CV_LOAD_IMAGE_UNCHANGED);
 
 	// if img file not available
 	//  print error msg and exit
