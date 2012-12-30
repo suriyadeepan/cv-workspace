@@ -1,0 +1,20 @@
+Code copied from [aishack.in]
+[http://www.aishack.in/2010/01/generating-uniform-noise/]
+
+Modified by RPS Deepan- 30/12/2012
+ generate Uniform noise
+  generate a random number
+   and add it to value of a pixel
+    in a loop
+
+* CvSize->width
+  CvSize->height
+
+	- dont seem to work
+	- insted use
+		img->height
+		img->width
+
+* cvLoadImage("file-name.jpg",0)
+
+	- 0 => load as grayscale image
