@@ -2,21 +2,27 @@
 Code copied from [aishack.in]
 [http://www.aishack.in/2010/01/thresholding/]
 
-Modified by RPS Deepan- 29/12/2012
-	splits the input image into
-	 3 channels and extracts the
-	  red regions alone by thresholding
-	   technique
-
-
-
-
+Modified by RPS Deepan- 30/12/2012
+	split the input image into
+	 3 channels and extract a particular
+	  region based on HSV values or
+	   BGR values by Thresholding technique
 */
+
+
 
 #include <stdio.h>	// For printf()
 #include <cv.h>		// Main OpenCV library.
 #include <highgui.h>	// OpenCV functions for files and graphical windows.
 
+
+
+/* this method - bgrThresh()
+ *  splits the input image into
+ *   3 channels and extracts the
+ *    red regions alone by thresholding
+ *
+ */
 IplImage* bgrThresh(IplImage** img)
 {
 
@@ -52,11 +58,47 @@ IplImage* bgrThresh(IplImage** img)
 }// end of method bgrThreshold()...
 
 
+/*
+ * this method segments the input image
+ *  based on a range of Hue value
+ */
+IplImage* hsvThreshold(IplImage** img)
+{
+		// covert bgr image (img) to HSV format
+		cvCvtColor(*img,*img,CV_BGR2HSV);
+
+
+		/*
+		 * initialize 3 grayscale images
+		 *  to store 3 channels of img
+		 */
+		IplImage* hue=cvCreateImage(cvGetSize(*img),8,1);
+		IplImage* sat=cvCreateImage(cvGetSize(*img),8,1);
+		IplImage* val=cvCreateImage(cvGetSize(*img),8,1);
+
+		// split src into 3 channels
+		cvSplit(*img, hue, sat, val, NULL);
+
+		/*
+		 * thresholding the image based on
+		 *  a hue value of range (174/2 to 186/2)
+		 *   this corresponds to light blue
+		 *    found from gimp
+		 */
+		cvInRangeS(hue, cvScalar(174/2, 0, 0,0), cvScalar(186/2, 255, 255,0),hue);
+
+	// return resulting thresholded image
+	return hue;
+
+}// end of method hsvThreshold()...
+
+
 int main(int argc, char* argv[])
 {
 	// load an image from file
 	IplImage* src=cvLoadImage("061.png",CV_LOAD_IMAGE_UNCHANGED);
 	IplImage* bgrThreshOp=cvCreateImage(cvGetSize(src),8,1);
+	IplImage* hsvThreshOp=cvCreateImage(cvGetSize(src),8,1);
 
 	cvStartWindowThread();
 
@@ -75,15 +117,24 @@ int main(int argc, char* argv[])
 	cvNamedWindow("input",CV_WINDOW_AUTOSIZE);
 	cvShowImage("input",src);
 
+	// wait for key event
 	cvWaitKey(0);
 
-	bgrThreshOp=bgrThresh(&src);
+	/*
+	 * this method segments the input image
+	 *  based on a range of Hue values
+	 *   returns the resluting thresholded image
+	 */
+	hsvThreshOp = hsvThreshold(&src);
 
-	cvNamedWindow("redW",CV_WINDOW_AUTOSIZE);
-	cvShowImage("redW",bgrThreshOp);
+	// display resulting image
+	cvNamedWindow("hsvW",CV_WINDOW_AUTOSIZE);
+	cvShowImage("hsvW",hsvThreshOp);
 
-	// wait from key event
+	// wait for key event
 	cvWaitKey(0);
+
+
 
 	// clean up memory...
 	cvDestroyAllWindows();
