@@ -1,0 +1,9 @@
+Code copied from [aishack.in]
+[http://www.aishack.in/2010/01/normalized-rgb/]
+
+Modified by RPS Deepan- 31/12/2012
+	get an image as input - split into 3 channels
+	 do R/(R+G+B) for each pixel in each channel
+	  merge 3 channels to get noramlized image
+
+	- though, normalized image seems erratic
