@@ -4,7 +4,10 @@ Created by RPS Deepan- 31/12/2012
 	- added a method addBrightness()
 	   to increase overall brightness of img
 
-Modified by RPS Deepan-
+Modified by RPS Deepan- 31/12/2012
+	- added a method addContrast()
+	   uses cvConvertScale() to increase
+	    constrast by a factor(double)
 
 */
 
@@ -21,6 +24,13 @@ IplImage* addBrightness(IplImage** img)
 
 	return *img;
 
+}
+
+IplImage* addContrast(IplImage** img)
+{
+	cvConvertScale(*img,*img,2,0);
+
+	return *img;
 }
 
 
@@ -53,7 +63,7 @@ int main(int argc, char* argv[])
 
 	cvDestroyWindow("input");
 
-	src=addBrightness(&src);
+	src=addContrast(&src);
 
 
 
