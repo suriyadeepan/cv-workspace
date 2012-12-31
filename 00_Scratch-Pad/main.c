@@ -33,6 +33,14 @@ IplImage* addContrast(IplImage** img)
 	return *img;
 }
 
+IplImage* invertImg(IplImage** img)
+{
+	cvNot(*img,*img);
+
+	return *img;
+}
+
+
 
 int main(int argc, char* argv[])
 {
@@ -63,13 +71,12 @@ int main(int argc, char* argv[])
 
 	cvDestroyWindow("input");
 
-	src=addContrast(&src);
+	src=invertImg(&src);
 
 
-
-	// display brighter image
-	cvNamedWindow("Brighter",CV_WINDOW_AUTOSIZE);
-	cvShowImage("Brighter",src);
+	// display inverted image
+	cvNamedWindow("Inverted",CV_WINDOW_AUTOSIZE);
+	cvShowImage("Inverted",src);
 
 
 	// wait for key event
