@@ -1,0 +1,9 @@
+Created by RPS Deepan- 02/01/2012
+	a program for training and object detection
+	 based on color based thresholding
+	  - hue range is found by training
+	     from a cropped out region of object
+	  - using the hue range src image containing
+	     object is thresholded
+	  - thresholded image is filetered using
+	     open and close morph ops

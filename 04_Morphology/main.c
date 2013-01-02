@@ -3,6 +3,11 @@
 Expt by RPS Deepan- 29/12/2012
   Loads a image and perform specific
   	  morphological operations over the image
+Modified by RPS Deepan- 02/01/2013
+  modified to test morphological operations on
+   an image hue-thresholded from the source image
+    for filtering noise
+
 
 */
 
@@ -10,10 +15,10 @@ Expt by RPS Deepan- 29/12/2012
 #include <cv.h>		// Main OpenCV library.
 #include <highgui.h>	// OpenCV functions for files and graphical windows.
 
-void initImgs(IplImage** src,IplImage** dest,IplImage** temp)
+void initImgs(IplImage** src,IplImage** dest,IplImage** temp,char* ipImgName)
 {
 	// image container...
-	 *src = cvLoadImage("04.jpg",CV_LOAD_IMAGE_UNCHANGED);
+	 *src = cvLoadImage(ipImgName,0);
 
 
 
@@ -23,8 +28,8 @@ void initImgs(IplImage** src,IplImage** dest,IplImage** temp)
 	}
 
 	// init other imgs...
-	*dest = cvCreateImage(cvGetSize(*src),(*src)->depth,3);
-	*temp = cvCreateImage(cvGetSize(*src),(*src)->depth,3);
+	*dest = cvCreateImage(cvGetSize(*src),(*src)->depth,1);
+	*temp = cvCreateImage(cvGetSize(*src),(*src)->depth,1);
 
 }
 
@@ -36,21 +41,39 @@ void initImgs(IplImage** src,IplImage** dest,IplImage** temp)
 		IplImage* temp;
 
 
+char imgFileName[32];
+
 
 int main(int argc, char* argv[])
 {
+
 	// necessary variables..
 	int mask_strength = 11;
 	char key='q';
 	char s_mask_strength[20] ;
 	char img_text[]="erode level: ";
 
+	if ( ! argv[1] ){
+		printf ( "ERROR give a file name " );
+		exit(1);
+	}
+	else {
+		strcpy(imgFileName,argv[1]);	
+
+ 	}
+
+	// display the original image...
+			IplImage* orgImg=cvLoadImage(argv[1],0);
+			cvNamedWindow("Original", CV_WINDOW_NORMAL);
+			cvShowImage("Original", orgImg);
+
+			cvWaitKey(0);
 
 	// Font obj for setting text font...
 		CvFont font;
 
-		// initialize font object...
-		cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX,
+	// initialize font object...
+	cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX,
 				1.0, 1.0, 0, 1, CV_AA);
 
 
@@ -66,7 +89,7 @@ int main(int argc, char* argv[])
 	do{
 
 		// initialize images...
-				initImgs(&src,&dest,&temp);
+		initImgs(&src,&dest,&temp,imgFileName);
 
 	// get Mask Strength from user
 	printf("Enter Mask Strength: ");
@@ -152,7 +175,7 @@ int main(int argc, char* argv[])
 
 
 	// display image in the "Modified" window...
-		cvNamedWindow("Modified", CV_WINDOW_AUTOSIZE);
+		cvNamedWindow("Modified", CV_WINDOW_NORMAL);
 		cvShowImage("Modified", dest);
 
 
@@ -180,7 +203,8 @@ int main(int argc, char* argv[])
 	// end of do...while loop
 
 
-
+	cvDestroyAllWindows();
+	cvReleaseImage(&orgImg);
 
 	return 0;
 }// end of main
