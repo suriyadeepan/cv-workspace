@@ -1,4 +1,6 @@
 *.o
 *~
 ext-res/
+*.mp4
+*.avi
 

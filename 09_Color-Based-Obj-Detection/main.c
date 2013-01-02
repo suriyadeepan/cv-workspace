@@ -39,40 +39,54 @@ int* trainImage(IplImage** img)
 		int max,min;
 		int* range=malloc(sizeof(int)*2 + 1);
 
+		IplImage* temp=cvCloneImage(*img);
 
 
 			// covert bgr image (img) to HSV format
-			cvCvtColor(*img,*img,CV_BGR2HSV);
+			cvCvtColor(*img,temp,CV_BGR2HSV);
 
 
 			/*
 			 * initialize 3 grayscale images
 			 *  to store 3 channels of img
 			 */
-			IplImage* hue=cvCreateImage(cvGetSize(*img),8,1);
+			IplImage* hue=cvCreateImage(cvGetSize(temp),8,1);
 			/*IplImage* sat=cvCreateImage(cvGetSize(*img),8,1);
 			IplImage* val=cvCreateImage(cvGetSize(*img),8,1);*/
 
 			// split src into 3 channels
-			cvSplit(*img, hue, NULL,NULL, NULL);
+			cvSplit(temp, hue, NULL,NULL, NULL);
 
-			int pixelValue=cvGetReal2D(hue,y,x);
+			// display hue
+			cvNamedWindow("HUE",CV_WINDOW_NORMAL);
+			cvShowImage("HUE",hue);
+
+
+
+			int pixelValue=cvGetReal2D(hue,(hue->height)/2,(hue->width)/2);
+
+			printf("Height: %d, Width: %d ",hue->height,hue->width);
+			printf("@ (%d,%d)",(hue->width)/2,(hue->height)/2);
+			printf("\nPIXEL VALUE (INIT): %d\n\n",pixelValue);
 			max=pixelValue;
 			min=max;
-
-
 
 			for(y=0;y<hue->height;y++)
 			{
 				for(x=0;x<hue->width;x++)
 				{
 
-					//printf("\nx: %d y: %d",x,y);
+
+
+						//printf("\nx: %d y: %d",x,y);
 
 
 						pixelValue=cvGetReal2D(hue,y,x);
 
-					// printf(" pixel vale: %d",pixelValue);
+						if(pixelValue<100)
+						{
+
+					 //printf(" pixel vale: %d",pixelValue);
 
 						if(pixelValue<10)
 							continue;
@@ -83,14 +97,21 @@ int* trainImage(IplImage** img)
 
 						if(pixelValue < min)
 							min=pixelValue;
+						}
+
 
 				}
 			}
 
+			cvWaitKey(0);
 
 
 			// release memory
+			cvDestroyWindow("HUE");
 			cvReleaseImage(&hue);
+
+			printf("\n\n Max: %d",max);
+			printf("\nMin: %d\n\n",min);
 
 			range[0]=min;
 			range[1]=max;
@@ -114,6 +135,7 @@ IplImage* hsvThreshold(IplImage** img,int** range)
 		 * initialize 3 grayscale images
 		 *  to store 3 channels of img
 		 */
+
 		IplImage* hue=cvCreateImage(cvGetSize(*img),8,1);
 
 
@@ -128,7 +150,9 @@ IplImage* hsvThreshold(IplImage** img,int** range)
 		 *   this corresponds to light blue
 		 *    found from gimp
 		 */
-		cvInRangeS(hue, cvScalar((*range)[0], 0, 0,0), cvScalar((*range)[1], 255, 255,0),hue);
+		//cvInRangeS(hue, cvScalar((*range)[0], 0, 0,0), cvScalar((*range)[1], 255, 255,0),hue);
+		cvInRangeS(hue, cvScalar(0, 0, 0,0),
+				cvScalar(10, 255, 255,0),hue);
 
 	// return resulting thresholded image
 	return hue;
@@ -162,7 +186,13 @@ int main(int argc, char* argv[])
 	//	IplImage* img;
 
 
-	IplImage* trainSrc=cvLoadImage("09.jpg",CV_LOAD_IMAGE_UNCHANGED);
+	IplImage* trainSrc=cvLoadImage("014.jpg",CV_LOAD_IMAGE_UNCHANGED);
+
+	cvNamedWindow("TrainingSrc",CV_WINDOW_NORMAL);
+	cvShowImage("TrainingSrc",trainSrc);
+
+	cvWaitKey(0);
+
 	IplImage* detectionSrc=cvLoadImage(argv[1],CV_LOAD_IMAGE_UNCHANGED);
 	IplImage* opImg=cvCreateImage(cvGetSize(detectionSrc),8,1);
 	IplImage* temp=cvCreateImage(cvGetSize(detectionSrc),8,1);
@@ -234,3 +264,4 @@ int main(int argc, char* argv[])
 	return 0;
 
 }// end of main
+
