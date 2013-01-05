@@ -1,0 +1,5 @@
+Created by RPS Deepan - 05-01-2013
+   reference - Learning OpenCV - Chapter 6 : Image Transforms
+   		  - aishack.in [http://www.aishack.in/2010/04/hough-transform-in-opencv/]
+ 
+ 		1. testing the method cvHoughLines2()
