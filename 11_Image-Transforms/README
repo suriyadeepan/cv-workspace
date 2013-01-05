@@ -1,5 +1,11 @@
-Created by RPS Deepan- 05/01/2013
+
+  Created by RPS Deepan- 05/01/2013
  	reference - Learning OpenCV - Chapter 6 : Image Transforms
  
  		1. testing the Sobel derivative operator
+ 			- detects edges, fits polynomial based on
+ 			   gradient in x or y direction
+ 		2. tested the SCHARR filter
+ 			- more accurate than Sobel when kernel size
+ 			   is small
  

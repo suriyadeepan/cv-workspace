@@ -3,8 +3,11 @@
  *	reference - Learning OpenCV - Chapter 6 : Image Transforms
  *
  *		1. testing the Sobel derivative operator
- *
- *
+ *			- detects edges, fits polynomial based on
+ *			   gradient in x or y direction
+ *		2. tested the SCHARR filter
+ *			- more accurate than Sobel when kernel size
+ *			   is small
  */
 
 
@@ -47,6 +50,20 @@ void sobelDerivatives(IplImage** src)
 
 }// end of method sobelDerivatives()
 
+void scharrFilter(IplImage** src,int x_order,int y_order,int aperture_size)
+{
+	IplImage* dst=cvCreateImage(cvGetSize(*src),8,1);
+
+	cvSobel(*src,dst,x_order,y_order,aperture_size);
+
+	cvNamedWindow("SCHARR",CV_WINDOW_NORMAL);
+	cvShowImage("SCHARR",dst);
+
+	cvWaitKey(0);
+
+	cvReleaseImage(&dst);
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -76,7 +93,9 @@ int main(int argc, char* argv[])
 	cvDestroyWindow("Source");
 */
 
-	sobelDerivatives(&src);
+	// sobelDerivatives(&src);
+
+	scharrFilter(&src,1,0,CV_SCHARR);
 
 
 	cvDestroyAllWindows();
