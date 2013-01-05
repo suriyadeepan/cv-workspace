@@ -8,6 +8,14 @@
  *		2. tested the SCHARR filter
  *			- more accurate than Sobel when kernel size
  *			   is small
+ *	    3. tested the Laplacian filter
+ *	    	- can be applied for blob detection
+ *	    	   and edge detection
+ *	    4. tested Canny Filter
+ *	    	- advanced edge detection technique
+ *	    	- edges formed by comparing gradient and
+ *	    	   high/low threshold values
+ *	    	- assembles edge pixels into contours
  */
 
 
@@ -64,6 +72,37 @@ void scharrFilter(IplImage** src,int x_order,int y_order,int aperture_size)
 	cvReleaseImage(&dst);
 }
 
+void laplacianFilter(IplImage** src,int aperture_size)
+{
+	IplImage* dst=cvCreateImage(cvGetSize(*src),8,1);
+
+	cvLaplace(*src,dst,aperture_size);
+
+	cvNamedWindow("Laplacian",CV_WINDOW_NORMAL);
+	cvShowImage("Laplacian",dst);
+
+	cvWaitKey(0);
+
+	cvReleaseImage(&dst);
+}
+
+void cannyFilter(IplImage** src,double lowThresh,double highThresh,int aperture_size)
+{
+
+	IplImage* dst=cvCreateImage(cvGetSize(*src),8,1);
+
+	cvCanny(*src,dst,lowThresh,highThresh,3);
+
+	cvNamedWindow("Canny",CV_WINDOW_NORMAL);
+	cvShowImage("Canny",dst);
+
+	cvWaitKey(0);
+
+	cvReleaseImage(&dst);
+
+
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -95,7 +134,11 @@ int main(int argc, char* argv[])
 
 	// sobelDerivatives(&src);
 
-	scharrFilter(&src,1,0,CV_SCHARR);
+	// scharrFilter(&src,1,0,CV_SCHARR);
+
+	// laplacianFilter(&src,3);
+
+	cannyFilter(&src,50,120,3);
 
 
 	cvDestroyAllWindows();

@@ -8,4 +8,11 @@
  		2. tested the SCHARR filter
  			- more accurate than Sobel when kernel size
  			   is small
- 
+  	    3. tested the Laplacian filter
+ 	    	- can be applied for blob detection
+ 	    	   and edge detection
+ 	    4. tested Canny Filter
+ 	    	- advanced edge detection technique
+ 	    	- edges formed by comparing gradient and
+ 	    	   high/low threshold values
+ 	    	- assembles edge pixels into contours 	    	   
