@@ -165,6 +165,83 @@ void rotateImage(IplImage** img,double angle)
 
 }
 
+void perspecTransform(IplImage** img)
+{
+	IplImage* dst = cvCloneImage(*img);
+
+	dst->origin = (*img)->origin;
+
+	cvZero(dst);
+
+		/*
+		 *  warp matrices contains the points
+		 *   on src to be mapped
+		 *  contains points over which mapping
+		 *   is done
+		 *
+		 */
+		CvPoint2D32f srcTri[4],dstTri[4];
+
+		// map matrices
+		CvMat* warpMat = cvCreateMat(3,3,CV_32FC1);
+
+
+
+	/*
+	 *  compute warp matrices
+	 *   by considering 3 corner points
+	 */
+
+	// source
+	// top left corner
+	srcTri[0].x=0;
+	srcTri[0].y=0;
+	// top right corner
+	srcTri[1].x=((*img)->width)-1;
+	srcTri[1].y=0;
+
+	// bottom left
+	srcTri[2].x=0;
+	srcTri[2].y=((*img)->height)-1;
+
+	// bottom right
+	srcTri[3].x=((*img)->width)-1;
+	srcTri[3].y=((*img)->height)-1;
+
+	// destination
+	// top left
+	dstTri[0].x=srcTri[0].x+((*img)->width)/2;
+	dstTri[0].y=srcTri[0].y+((((*img)->width)/2)*0.5);
+	// top right
+	dstTri[1].x=srcTri[1].x;
+	dstTri[1].y=srcTri[1].y;
+	// bottom left
+	dstTri[2].x=srcTri[2].x+((*img)->width)/2;
+	dstTri[2].y=srcTri[2].y+((((*img)->width)/2)*0.5);
+	// bottom right
+	dstTri[3].x=srcTri[3].x;
+	dstTri[3].y=srcTri[3].y;
+
+	// get warp_mat using cvGetAffineTransform()
+	cvGetPerspectiveTransform(srcTri,dstTri,warpMat);
+
+	// warp the image using warpMat
+	//  obtained from above step
+	cvWarpPerspective(*img,dst,warpMat,CV_INTER_LINEAR | CV_WARP_FILL_OUTLIERS,CV_RGB(0,0,0));
+
+	// display warped image
+	cvNamedWindow("Warped",CV_WINDOW_NORMAL);
+	cvShowImage("Warped",dst);
+
+	// wait for key press
+	cvWaitKey(0);
+
+	// release memory
+	cvReleaseImage(&dst);
+	cvDestroyWindow("Warped");
+	cvReleaseMat(&warpMat);
+}
+
 int main(int argc, char* argv[])
 {
 
@@ -180,15 +257,14 @@ int main(int argc, char* argv[])
 
 	//warpImage(&src);
 
+	/*
 	// rotation parameters
-	// double angle=0;
+	 double angle=0;
 
-	// index variable for iterating
-	int i=0;
+	rotateImage(&src,angle);
+	*/
 
-	for(i=0;i<5;i++)
-	rotateImage(&src,(double)(i*45));
-
+	perspecTransform(&src);
 
 
 	// release memory
