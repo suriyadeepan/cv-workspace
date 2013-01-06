@@ -4,3 +4,5 @@ Created by RPS Deepan - 05-01-2013
  	 	1. testing affine transformation
  			using cvWarpAffine() method
  			 with cvGetAffineTransform()
+ 		2. tested Rotation of image using
+ 		    cvWarpAffine() with cv2DRotationMatrix() 			
