@@ -1,0 +1,22 @@
+/*
+ *	Created by RPS Deepan - 05-01-2013
+ *
+ */
+
+
+#include<stdio.h>
+#include<cv.h>
+#include<highgui.h>
+
+int main(int argc, char* argv[])
+{
+	IplImage* src = cvLoadImage(argv[1],CV_LOAD_IMAGE_UNCHANGED);
+
+	// display source
+	cvNamedWindow("Source",CV_WINDOW_NORMAL);
+	cvShowImage("Source",src);
+
+	cvWaitKey(0);
+
+	return 0;
+}// end of main
