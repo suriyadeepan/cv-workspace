@@ -1,8 +1,27 @@
+#!/usr/bin/bash
+#
+# this script creates a folder for 
+#  for the project inside which it 
+#   creates README file (empty)
+#   copies ../template/temp1 as main.c
+#   copies ../res/01.jpg as 01.jpg
+#
+# create directory
 mkdir $1
+#
+# go to the dir
 cd ./$1
+#
+# copy temp1 as main.c 
+#
 cp ../templates/temp1 main.c
+#
+# copy 01.jpg into the folder
 cp ../res/01.jpg ./
+#
+# create README file
 touch README
+#
 echo "created project $1 at"
 pwd
 echo 
@@ -10,3 +29,4 @@ echo Project Files
 ls
 echo
 cd ..
+# end of script

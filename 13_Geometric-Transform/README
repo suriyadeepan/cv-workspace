@@ -1,0 +1,6 @@
+Created by RPS Deepan - 05-01-2013
+ 	 reference - Learning OpenCV - Chapter 6 : Image Transforms
+ 
+ 	 	1. testing affine transformation
+ 			using cvWarpAffine() method
+ 			 with cvGetAffineTransform()
