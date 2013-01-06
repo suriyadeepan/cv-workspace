@@ -3,3 +3,10 @@ Created by RPS Deepan - 05-01-2013
    		  - aishack.in [http://www.aishack.in/2010/04/hough-transform-in-opencv/]
  
  		1. testing the method cvHoughLines2()
+ 		
+ 		
+ 		
+* Note:
+
+1. add "-lm" to the compile command for linking math 
+    lib which includes functions like sine  		

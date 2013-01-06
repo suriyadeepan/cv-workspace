@@ -11,7 +11,7 @@
 
 #include<cv.h>
 #include<highgui.h>
-
+#include<math.h>
 #include<stdio.h>
 
 int main(int argc, char* argv[])
@@ -29,20 +29,29 @@ int main(int argc, char* argv[])
 	// wait for key press
 	cvWaitKey(0);
 
-		// storage space
+	// storage space
 	 CvMemStorage* storage = cvCreateMemStorage(0);
 
 	 // a sequence for storing lines...
 	 CvSeq* lines = 0;
+	 //CvVect32f lines;
 
 	 // resolution parameters
-	 double rho=1,theta=CV_PI/180;
+	 double rho=1,theta=0.01;
 
 	 // threshold value
 	 int threshold = 100;
 
 	 // canny filter
 	 cvCanny(src, src, 50, 245, 3);
+
+	 // display canny image
+	 cvNamedWindow("Canny",CV_WINDOW_NORMAL);
+	 cvShowImage("Canny",src);
+
+	 cvWaitKey(0);
+
+	 cvDestroyWindow("Canny");
 
 	 // do hough transform...
 	 lines = cvHoughLines2( src, storage, CV_HOUGH_STANDARD,
@@ -51,16 +60,43 @@ int main(int argc, char* argv[])
 	 // index variable for iteration
 	 int i=0;
 
+	 /*
+
 	 for(i = 0; i < lines->total; i++)
 	 {
 
 		 CvPoint* pts=(CvPoint*)cvGetSeqElem(lines,i);
-		 cvLine(temp,pts[0],pts[1],CV_RGB(0,255,0),1,8,0);
+		 printf("\nPoints 0 0: %f %f",pts[0].x,pts[0].y);
+		 printf("\nPoints 1 1: %f %f",pts[1].x,pts[1].y);
+		 //cvLine(temp,pts[0],pts[1],CV_RGB(0,255,0),1,8,0);
 
 
-     }
+     }*/
 
-	 cvDestroyWindow("Source");
+
+	 // extract points (x,y) from (rho,theta) op of
+	 //  houghLines2() method...
+
+	 for(  i = 0; i < lines->total; i++ )
+	 {
+
+		 float* line = (float*)cvGetSeqElem(lines,i);
+
+		 float rho = line[0];
+		 float theta = line[1];
+
+		 CvPoint pt1, pt2;
+
+	   double a = cos(theta), b = sin(theta);
+	   double x0 = a*rho, y0 = b*rho;
+	   pt1.x = cvRound(x0 + 1000*(-b));
+	   pt1.y = cvRound(y0 + 1000*(a));
+	   pt2.x = cvRound(x0 - 1000*(-b));
+	   pt2.y = cvRound(y0 - 1000*(a));
+	   cvLine( temp, pt1, pt2, CV_RGB(255,0,0), 1,8,0);
+	 }
+
+
 
 	 // display output...
 	 cvNamedWindow("HoughOp",CV_WINDOW_NORMAL);
