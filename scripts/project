@@ -1,0 +1,12 @@
+mkdir $1
+cd ./$1
+cp ../templates/temp1 main.c
+cp ../res/01.jpg ./
+touch README
+echo "created project $1 at"
+pwd
+echo 
+echo Project Files
+ls
+echo
+cd ..

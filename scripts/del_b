@@ -1,0 +1,8 @@
+echo 
+echo deleting local branch
+echo
+git branch -D $1
+echo
+echo deleting remote branch
+echo
+git push origin --delete $1
