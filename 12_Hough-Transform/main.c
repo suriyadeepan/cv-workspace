@@ -14,20 +14,8 @@
 #include<math.h>
 #include<stdio.h>
 
-int main(int argc, char* argv[])
+void doHoughLineTransform(IplImage** src,IplImage** temp)
 {
-
-	IplImage* src = cvLoadImage(argv[1],0);
-	IplImage* temp = cvCloneImage(src);
-
-	cvStartWindowThread();
-
-	// display source...
-	cvNamedWindow("Source",CV_WINDOW_NORMAL);
-	cvShowImage("Source",src);
-
-	// wait for key press
-	cvWaitKey(0);
 
 	// storage space
 	 CvMemStorage* storage = cvCreateMemStorage(0);
@@ -40,38 +28,37 @@ int main(int argc, char* argv[])
 	 double rho=1,theta=0.01;
 
 	 // threshold value
-	 int threshold = 100;
+	 int threshold = 240;
 
 	 // canny filter
-	 cvCanny(src, src, 50, 245, 3);
+	 cvCanny(*src, *src, 20, 80, 3);
 
 	 // display canny image
 	 cvNamedWindow("Canny",CV_WINDOW_NORMAL);
-	 cvShowImage("Canny",src);
+	 cvShowImage("Canny",*src);
 
+	 // wait for key press
 	 cvWaitKey(0);
 
+	 // destroy Canny window
 	 cvDestroyWindow("Canny");
 
 	 // do hough transform...
-	 lines = cvHoughLines2( src, storage, CV_HOUGH_STANDARD,
+	 /*
+	  * src -> image
+	  * storage -> CvMemoryStorage (space for storage)
+	  * CV_HOUGH_STANDARD -> method
+	  * rho -> normal distance
+	  * theta -> angle
+	  * threshold -> 0-255 (i think)
+	  * param1, param2 -> 0,0
+	  *
+	  */
+	 lines = cvHoughLines2( *src, storage, CV_HOUGH_STANDARD,
 	  rho, theta, threshold, 0,0);
 
 	 // index variable for iteration
 	 int i=0;
-
-	 /*
-
-	 for(i = 0; i < lines->total; i++)
-	 {
-
-		 CvPoint* pts=(CvPoint*)cvGetSeqElem(lines,i);
-		 printf("\nPoints 0 0: %f %f",pts[0].x,pts[0].y);
-		 printf("\nPoints 1 1: %f %f",pts[1].x,pts[1].y);
-		 //cvLine(temp,pts[0],pts[1],CV_RGB(0,255,0),1,8,0);
-
-
-     }*/
 
 
 	 // extract points (x,y) from (rho,theta) op of
@@ -80,36 +67,80 @@ int main(int argc, char* argv[])
 	 for(  i = 0; i < lines->total; i++ )
 	 {
 
+		 // get sequence elements (single line
+		 //  from array of lines)
 		 float* line = (float*)cvGetSeqElem(lines,i);
 
+		 // get rho,theta info from line
 		 float rho = line[0];
 		 float theta = line[1];
 
+		 // points to store x,y
 		 CvPoint pt1, pt2;
 
-	   double a = cos(theta), b = sin(theta);
-	   double x0 = a*rho, y0 = b*rho;
-	   pt1.x = cvRound(x0 + 1000*(-b));
-	   pt1.y = cvRound(y0 + 1000*(a));
-	   pt2.x = cvRound(x0 - 1000*(-b));
-	   pt2.y = cvRound(y0 - 1000*(a));
-	   cvLine( temp, pt1, pt2, CV_RGB(255,0,0), 1,8,0);
-	 }
+		 // rho = xcos(theta) + ysin(theta)
+		 // get x,y from rho,theta
+		 double a = cos(theta), b = sin(theta);
+		 double x0 = a*rho, y0 = b*rho;
+		 pt1.x = cvRound(x0 + 1000*(-b));
+		 pt1.y = cvRound(y0 + 1000*(a));
+		 pt2.x = cvRound(x0 - 1000*(-b));
+		 pt2.y = cvRound(y0 - 1000*(a));
+
+		 /*
+		 printf("\nPoint 1: %d %d ",pt1.x,pt1.y);
+		 printf("Point 2: %d %d\n",pt2.x,pt2.y);
+		*/
+
+		 // draw line connecting pt1 and pt2
+		 cvLine( *temp, pt1, pt2, CV_RGB(255,0,0), 1,8,0);
+
+			 }
 
 
 
 	 // display output...
-	 cvNamedWindow("HoughOp",CV_WINDOW_NORMAL);
-	 cvShowImage("HoughOp",temp);
+ 	 cvNamedWindow("HoughOp",CV_WINDOW_NORMAL);
+ 	 cvShowImage("HoughOp",*temp);
 
+ 	 // wait for key press
+ 	 cvWaitKey(0);
+
+ 	 cvDestroyWindow("Canny");
+ 	 cvReleaseMemStorage(&storage);
+
+}
+
+int main(int argc, char* argv[])
+{
+
+	IplImage* src = cvLoadImage(argv[1],0);
+	IplImage* temp = cvCloneImage(src);
+
+
+
+
+	cvStartWindowThread();
+
+	// display source...
+	cvNamedWindow("Source",CV_WINDOW_NORMAL);
+	cvShowImage("Source",src);
 
 	// wait for key press
 	cvWaitKey(0);
 
+	//doHoughLineTransform(&src,&temp);
+
+
+
+
+
+	// release memory
 	cvDestroyAllWindows();
 	cvReleaseImage(&src);
 	cvReleaseImage(&temp);
-	cvReleaseMemStorage(&storage);
+
+
 
 
 
