@@ -1,11 +1,19 @@
 /*
  * Created by RPS Deepan - 05-01-2013
  *  reference - Learning OpenCV - Chapter 6 : Image Transforms
- *  		  - aishack.in [http://www.aishack.in/2010/04/hough-transform-in-opencv/]
+ *
  *
  *		1. testing the method cvHoughLines2()
+ *			ref - aishack.in
+ *				  [http://www.aishack.in/2010/04/hough-transform-in-opencv/]
  *
- *
+ *		2. testing the method cvHoughCircles()
+ *			ref - aishack.in
+ *				  [http://www.aishack.in/2010/04/hough-circles-in-opencv/]
+ *				- opencv yahoo group
+ *				  [http://tech.groups.yahoo.com/group/OpenCV/message/16035?source=1&var=1]
+ *				- opencv documentation
+ *				  [http://docs.opencv.org/trunk/doc/tutorials/imgproc/imgtrans/hough_circle/hough_circle.html]
  */
 
 
@@ -22,7 +30,7 @@ void doHoughLineTransform(IplImage** src,IplImage** temp)
 
 	 // a sequence for storing lines...
 	 CvSeq* lines = 0;
-	 //CvVect32f lines;
+
 
 	 // resolution parameters
 	 double rho=1,theta=0.01;
@@ -115,9 +123,8 @@ int main(int argc, char* argv[])
 {
 
 	IplImage* src = cvLoadImage(argv[1],0);
-	IplImage* temp = cvCloneImage(src);
-
-
+	//IplImage* opImage=cvCloneImage(src);
+	IplImage* opImage=cvLoadImage(argv[1],CV_LOAD_IMAGE_UNCHANGED);
 
 
 	cvStartWindowThread();
@@ -131,14 +138,45 @@ int main(int argc, char* argv[])
 
 	//doHoughLineTransform(&src,&temp);
 
+	// storage space
+		 CvMemStorage* storage = cvCreateMemStorage(0);
+
+    // a sequence for storing circles...
+		 CvSeq* circles = 0;
+
+	// do hough circle transform
+	circles = cvHoughCircles(src,storage,CV_HOUGH_GRADIENT,2,
+			10,200,100,5,130);
+
+	// index variable for iterating thro' circles
+	int i=0;
+
+	// iterate thro' circles to fetch
+	//  individual circles
+	for(i=0;i<circles->total;i++)
+	{
+		// get individual circle from sequence circles
+		float* circle = (float*)cvGetSeqElem(circles,i);
+
+		// get x,y from each circle
+		CvPoint pt = cvPoint(cvRound(circle[0]), cvRound( circle[1] ));
+
+		// draw circle on source image
+		cvCircle(opImage,pt,cvRound( circle[2] ),CV_RGB(255,0,0),3,8,0);
 
 
+	}
 
+	// display output
+	cvNamedWindow("HoughOp",CV_WINDOW_NORMAL);
+	cvShowImage("HoughOp",opImage);
+
+	cvWaitKey(0);
 
 	// release memory
 	cvDestroyAllWindows();
 	cvReleaseImage(&src);
-	cvReleaseImage(&temp);
+	cvReleaseImage(&opImage);
 
 
 

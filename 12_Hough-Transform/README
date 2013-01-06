@@ -1,12 +1,15 @@
 Created by RPS Deepan - 05-01-2013
    reference - Learning OpenCV - Chapter 6 : Image Transforms
-   		  - aishack.in [http://www.aishack.in/2010/04/hough-transform-in-opencv/]
+ 
  
  		1. testing the method cvHoughLines2()
- 		
- 		
- 		
-* Note:
-
-1. add "-lm" to the compile command for linking math 
-    lib which includes functions like sine  		
+ 			ref - aishack.in
+ 				  [http://www.aishack.in/2010/04/hough-transform-in-opencv/]
+ 
+ 		2. testing the method cvHoughCircles()
+ 			ref - aishack.in
+ 				  [http://www.aishack.in/2010/04/hough-circles-in-opencv/]
+ 				- opencv yahoo group
+ 				  [http://tech.groups.yahoo.com/group/OpenCV/message/16035?source=1&var=1]
+ 				- opencv documentation
+ 				  [http://docs.opencv.org/trunk/doc/tutorials/imgproc/imgtrans/hough_circle/hough_circle.html]
