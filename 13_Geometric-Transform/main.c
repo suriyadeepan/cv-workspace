@@ -211,13 +211,13 @@ void perspecTransform(IplImage** img)
 	// destination
 	// top left
 	dstTri[0].x=srcTri[0].x+((*img)->width)/2;
-	dstTri[0].y=srcTri[0].y+((((*img)->width)/2)*0.5);
+	dstTri[0].y=srcTri[0].y+((((*img)->width)/2)*sin(CV_PI/90));
 	// top right
 	dstTri[1].x=srcTri[1].x;
 	dstTri[1].y=srcTri[1].y;
 	// bottom left
 	dstTri[2].x=srcTri[2].x+((*img)->width)/2;
-	dstTri[2].y=srcTri[2].y+((((*img)->width)/2)*0.5);
+	dstTri[2].y=srcTri[2].y+((((*img)->width)/2)*sin(CV_PI/90));
 	// bottom right
 	dstTri[3].x=srcTri[3].x;
 	dstTri[3].y=srcTri[3].y;
