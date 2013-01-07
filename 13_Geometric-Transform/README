@@ -5,4 +5,6 @@ Created by RPS Deepan - 05-01-2013
  			using cvWarpAffine() method
  			 with cvGetAffineTransform()
  		2. tested Rotation of image using
- 		    cvWarpAffine() with cv2DRotationMatrix() 			
+ 		    cvWarpAffine() with cv2DRotationMatrix()
+ 		3. tested Perspective Transforms @
+ 		    different angles 			

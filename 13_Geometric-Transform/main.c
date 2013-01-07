@@ -7,6 +7,9 @@
  *			 with cvGetAffineTransform()
  *		2. tested Rotation of image using
  *		    cvWarpAffine() with cv2DRotationMatrix()
+ *
+ *		3. tested Perspective Transforms @
+ *		    different angles
  */
 
 
