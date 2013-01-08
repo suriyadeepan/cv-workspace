@@ -79,6 +79,16 @@ IplImage* hsvThreshold(IplImage** img)
 		// split src into 3 channels
 		cvSplit(*img, hue, sat, val, NULL);
 
+		cvNamedWindow("hue",CV_WINDOW_AUTOSIZE);
+		cvShowImage("hue",hue);
+
+
+		cvNamedWindow("sat",CV_WINDOW_AUTOSIZE);
+		cvShowImage("sat",sat);
+
+
+		cvNamedWindow("val",CV_WINDOW_AUTOSIZE);
+		cvShowImage("val",val);
 		/*
 		 * thresholding the image based on
 		 *  a hue value of range (174/2 to 186/2)

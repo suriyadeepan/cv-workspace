@@ -14,8 +14,6 @@ Modified by RPS Deepan- 29/12/2012
 #include <cv.h>		// Main OpenCV library.
 #include <highgui.h>	// OpenCV functions for files and graphical windows.
 
-
-
 // the method contourDetect()
 //  detect all contours and
 //   draws them on to a copy of src

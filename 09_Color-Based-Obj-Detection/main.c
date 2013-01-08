@@ -19,103 +19,66 @@ Created by RPS Deepan- 02/01/2012
 #include <highgui.h>	// OpenCV functions for files and graphical windows.
 
 
-IplImage* addBrightness(IplImage** img)
+IplImage* addBrightness(IplImage* img)
 {
-	cvAddS(*img,cvScalar(50,50,50,0),*img,NULL);
-
-	return *img;
-
+	cvAddS(img,cvScalar(50,50,50,0),img,NULL);
+	return img;
 }
 
-
-
-
-int* trainImage(IplImage** img)
+int* trainImage(IplImage* img)
 {
-		// variable for iterating
-		int x=0,y=0;
+	// variable for iterating
+	int x=0,y=0;
 
-		// variables for finding and storing range
-		int max,min;
-		int* range=malloc(sizeof(int)*2 + 1);
+	// variables for finding and storing range
+	int max,min;
+	int* range = malloc(sizeof(int)*2 + 1);
 
-		IplImage* temp=cvCloneImage(*img);
+	IplImage* temp = cvCloneImage(img);
 
+	// covert bgr image (img) to HSV format
+	cvCvtColor(img,temp,CV_BGR2HSV);
 
-			// covert bgr image (img) to HSV format
-			cvCvtColor(*img,temp,CV_BGR2HSV);
+	/* initialize 3 grayscale images to store 3 channels of img	 */
+	IplImage* hue = cvCreateImage(cvGetSize(temp),8,1);
+	/*IplImage* sat=cvCreateImage(cvGetSize(*img),8,1);
+	IplImage* val=cvCreateImage(cvGetSize(*img),8,1);*/
 
+	// split src into 3 channels
+	cvSplit(temp, hue, NULL,NULL, NULL);
+	// display hue
+	cvNamedWindow("HUE",CV_WINDOW_NORMAL);
+	cvShowImage("HUE",hue);
 
-			/*
-			 * initialize 3 grayscale images
-			 *  to store 3 channels of img
-			 */
-			IplImage* hue=cvCreateImage(cvGetSize(temp),8,1);
-			/*IplImage* sat=cvCreateImage(cvGetSize(*img),8,1);
-			IplImage* val=cvCreateImage(cvGetSize(*img),8,1);*/
+	int pixelValue=cvGetReal2D(hue,(hue->height)/2,(hue->width)/2);
 
-			// split src into 3 channels
-			cvSplit(temp, hue, NULL,NULL, NULL);
+	printf("Height: %d, Width: %d ",hue->height,hue->width);
+	printf("@ (%d,%d)",(hue->width)/2,(hue->height)/2);
+	printf("\nPIXEL VALUE (INIT): %d\n\n",pixelValue);
 
-			// display hue
-			cvNamedWindow("HUE",CV_WINDOW_NORMAL);
-			cvShowImage("HUE",hue);
+	max = min = pixelValue;
+	for ( y = 0 ; y < hue->height ; y++ ) {
+		for ( x = 0 ; x < hue->width ; x++ ) {
+			//printf("\nx: %d y: %d",x,y);
+			pixelValue = cvGetReal2D ( hue, y, x ) ;
+			if (( pixelValue < 100 )&&(pixelValue < 10 )) {
 
-
-
-			int pixelValue=cvGetReal2D(hue,(hue->height)/2,(hue->width)/2);
-
-			printf("Height: %d, Width: %d ",hue->height,hue->width);
-			printf("@ (%d,%d)",(hue->width)/2,(hue->height)/2);
-			printf("\nPIXEL VALUE (INIT): %d\n\n",pixelValue);
-			max=pixelValue;
-			min=max;
-
-			for(y=0;y<hue->height;y++)
-			{
-				for(x=0;x<hue->width;x++)
-				{
-
-
-
-						//printf("\nx: %d y: %d",x,y);
-
-
-						pixelValue=cvGetReal2D(hue,y,x);
-
-						if(pixelValue<100)
-						{
-
-					 //printf(" pixel vale: %d",pixelValue);
-
-						if(pixelValue<10)
-							continue;
-
-
-						if(pixelValue > max)
-							max=pixelValue;
-
-						if(pixelValue < min)
-							min=pixelValue;
-						}
-
-
-				}
+				if ( pixelValue > max )	max = pixelValue;
+				if ( pixelValue < min )	min = pixelValue;
 			}
+		}
+	}
 
-			cvWaitKey(0);
+	cvWaitKey(0);
+	// release memory
+	cvDestroyWindow("HUE");
+	cvReleaseImage(&hue);
 
+	printf("\n\n Max: %d",max);
+	printf("\nMin: %d\n\n",min);
 
-			// release memory
-			cvDestroyWindow("HUE");
-			cvReleaseImage(&hue);
-
-			printf("\n\n Max: %d",max);
-			printf("\nMin: %d\n\n",min);
-
-			range[0]=min;
-			range[1]=max;
-
+	range[0]=min;
+	range[1]=max;
 
 	return range;
 }
@@ -125,34 +88,25 @@ int* trainImage(IplImage** img)
  * this method segments the input image
  *  based on a range of Hue value
  */
-IplImage* hsvThreshold(IplImage** img,int** range)
+IplImage* hsvThreshold(IplImage* img,int* range)
 {
-		// covert bgr image (img) to HSV format
-		cvCvtColor(*img,*img,CV_BGR2HSV);
+	// covert bgr image (img) to HSV format
+	cvCvtColor(img,img,CV_BGR2HSV);
 
+	/* initialize 3 grayscale images  to store 3 channels of img */
+	IplImage* hue=cvCreateImage(cvGetSize(img),8,1);
 
-		/*
-		 * initialize 3 grayscale images
-		 *  to store 3 channels of img
-		 */
+	// split src into 3 channels
+	cvSplit(img, hue, NULL, NULL, NULL);
 
-		IplImage* hue=cvCreateImage(cvGetSize(*img),8,1);
+	printf("\nRange: %d %d\n",range[0],range[1]);
 
+	/* thresholding the image based on  a hue value of range (174/2 to 186/2)
+	 *   this corresponds to light blue found from gimp  */
 
-		// split src into 3 channels
-		cvSplit(*img, hue, NULL, NULL, NULL);
-
-		printf("\nRange: %d %d\n",(*range)[0],(*range)[1]);
-
-		/*
-		 * thresholding the image based on
-		 *  a hue value of range (174/2 to 186/2)
-		 *   this corresponds to light blue
-		 *    found from gimp
-		 */
-		//cvInRangeS(hue, cvScalar((*range)[0], 0, 0,0), cvScalar((*range)[1], 255, 255,0),hue);
-		cvInRangeS(hue, cvScalar(0, 0, 0,0),
-				cvScalar(10, 255, 255,0),hue);
+	//cvInRangeS(hue, cvScalar((*range)[0], 0, 0,0), cvScalar((*range)[1], 255, 255,0),hue);
+	cvInRangeS ( hue, cvScalar ( 0, 0, 0 ,0 ),
+					 cvScalar ( 10, 255, 255,0 ),hue);
 
 	// return resulting thresholded image
 	return hue;
@@ -160,94 +114,71 @@ IplImage* hsvThreshold(IplImage** img,int** range)
 }// end of method hsvThreshold()...
 
 
-IplImage* addContrast(IplImage** img)
+IplImage* addContrast(IplImage* img)
 {
-	cvConvertScale(*img,*img,2,0);
-
-	return *img;
+	cvConvertScale(img,img,2,0);
+	return img;
 }
 
-IplImage* invertImg(IplImage** img)
+IplImage* invertImg(IplImage* img)
 {
-	cvNot(*img,*img);
-
-	return *img;
+	cvNot(img,img);
+	return img;
 }
-
-
 
 int main(int argc, char* argv[])
 {
 	// variable for storing range
-	int* range=malloc(sizeof(int)*2 + 1);
+	int* range = malloc ( sizeof (range) * 2 + 1 );
 
 	// load an image from file
 	//	IplImage* src=cvLoadImage("00.jpg",CV_LOAD_IMAGE_UNCHANGED);
 	//	IplImage* img;
 
-
 	IplImage* trainSrc=cvLoadImage("014.jpg",CV_LOAD_IMAGE_UNCHANGED);
 
+	cvStartWindowThread();
 	cvNamedWindow("TrainingSrc",CV_WINDOW_NORMAL);
 	cvShowImage("TrainingSrc",trainSrc);
-
-	cvWaitKey(0);
+	//cvWaitKey(0);
 
 	IplImage* detectionSrc=cvLoadImage(argv[1],CV_LOAD_IMAGE_UNCHANGED);
 	IplImage* opImg=cvCreateImage(cvGetSize(detectionSrc),8,1);
-	IplImage* temp=cvCreateImage(cvGetSize(detectionSrc),8,1);
-
-
-
-	cvStartWindowThread();
+	IplImage* temp=cvCreateImage(cvGetSize(detectionSrc),8,1);	
 
 	// display src image
-		cvNamedWindow("Src",CV_WINDOW_NORMAL);
-		cvShowImage("Src",detectionSrc);
+	cvNamedWindow("Src",CV_WINDOW_NORMAL);
+	cvShowImage("Src",detectionSrc);
 
-		cvWaitKey(0);
+	//cvWaitKey(0);
 
-	range=trainImage(&trainSrc);
-
+	range=trainImage(trainSrc);
 	printf("\nRange: %d to %d\n",range[0],range[1]);
 
-
-	opImg=hsvThreshold(&detectionSrc,&range);
-
+	opImg=hsvThreshold(detectionSrc,range);
 
 	// display op image
 	cvNamedWindow("Output",CV_WINDOW_NORMAL);
 	cvShowImage("Output",opImg);
 
-
-
 	// save op to file
 	cvSaveImage("op-img.jpg",opImg,0);
 
 	// Noise Filtering
-
 	// get mask strength as input from user
 	int mask_strength;
 	printf("MASK STRENGTH: ");
 	scanf("%d",&mask_strength);
 
 	// apply mask...
-
 	// close
-		cvMorphologyEx(opImg,opImg,temp,NULL,CV_MOP_CLOSE,mask_strength);
-
-
+	cvMorphologyEx(opImg,opImg,temp,NULL,CV_MOP_CLOSE,mask_strength);
 	// open
 	cvMorphologyEx(opImg,opImg,temp,NULL,CV_MOP_OPEN,mask_strength);
-
-
-
-
 
 	// display filtered image
 	cvNamedWindow("filtered",CV_WINDOW_NORMAL);
 	cvShowImage("filtered",opImg);
-
 	cvWaitKey(0);
 
 	// clean up memory...
@@ -255,11 +186,7 @@ int main(int argc, char* argv[])
 	cvReleaseImage(&trainSrc);
 	cvReleaseImage(&detectionSrc);
 	cvReleaseImage(&opImg);
-
-
-
 	//cvWaitKey(0);
-
 
 	return 0;
 

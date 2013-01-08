@@ -21,16 +21,17 @@ int main(int argc, char* argv[])
 	IplImage* hPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
 	IplImage* sPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
 	IplImage* vPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
+	IplImage* dPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
 	IplImage* planes[] = {hPlane,sPlane};
 
-	cvSplit(hsvSrc,hPlane,sPlane,vPlane,NULL);
+	cvSplit(hsvSrc,hPlane,sPlane,vPlane,dPlane);
 
 	// Build histogram
 	int hBins = 30, sBins = 32;
 
 	// setup hist
 	CvHistogram* hist;
-	{
+	
 		// sizes of each dimension's bins
 		int histSize[] = { hBins, sBins };
 
@@ -46,7 +47,7 @@ int main(int argc, char* argv[])
 		// create histogram
 		hist = cvCreateHist(2,histSize,CV_HIST_ARRAY,ranges,1);
 
-	}// end of histogram DS hist
+	// end of histogram DS hist
 
 	// Compute Histogram
 	cvCalcHist(planes,hist,0,0);
@@ -103,6 +104,7 @@ int main(int argc, char* argv[])
 	cvReleaseImage(&hPlane);
 	cvReleaseImage(&sPlane);
 	cvReleaseImage(&vPlane);
+	cvReleaseImage(&dPlane);
 	cvReleaseImage(&hsvSrc);
 	cvReleaseImage(&histImg);
 
