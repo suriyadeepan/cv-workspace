@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
 	//	IplImage* src=cvLoadImage("00.jpg",CV_LOAD_IMAGE_UNCHANGED);
 	//	IplImage* img;
 
-	IplImage* trainSrc=cvLoadImage("014.jpg",CV_LOAD_IMAGE_UNCHANGED);
+	IplImage* trainSrc=cvLoadImage("093.jpg",CV_LOAD_IMAGE_UNCHANGED);
 
 	cvStartWindowThread();
 	cvNamedWindow("TrainingSrc",CV_WINDOW_NORMAL);

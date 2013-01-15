@@ -103,12 +103,49 @@ IplImage* hsvThreshold(IplImage** img)
 }// end of method hsvThreshold()...
 
 
+IplImage* addContrast(IplImage** img,int scale)
+{
+	cvConvertScale(*img,*img,scale,0);
+
+	return *img;
+}
+
+
+IplImage* adapThresh(IplImage** img)
+{
+
+
+	IplImage* thresh = cvCreateImage(cvGetSize(*img),8,1);
+
+
+
+	/*
+	 *	*img -> thresh
+	 *	max_val = 255
+	 *	method = CV_ADAPTIVE_THRESH_MEAN_C
+	 *	threshold type = CV_THRESH_BINARY
+	 *	block_size = 3
+	 *	param1 = 5
+	 */
+
+	cvAdaptiveThreshold(*img,thresh,255,CV_ADAPTIVE_THRESH_GAUSSIAN_C,CV_THRESH_BINARY,3,3);
+
+	return thresh;
+
+}
+
+
+
+
 int main(int argc, char* argv[])
 {
 	// load an image from file
-	IplImage* src=cvLoadImage("061.png",CV_LOAD_IMAGE_UNCHANGED);
+	IplImage* src=cvLoadImage(argv[1],CV_LOAD_IMAGE_UNCHANGED);
 	IplImage* bgrThreshOp=cvCreateImage(cvGetSize(src),8,1);
 	IplImage* hsvThreshOp=cvCreateImage(cvGetSize(src),8,1);
+	IplImage* adapThreshOp=cvCreateImage(cvGetSize(src),8,1);
+
+	IplImage* grayImg=cvCreateImage(cvGetSize(src),8,1);
 
 	cvStartWindowThread();
 
@@ -130,16 +167,22 @@ int main(int argc, char* argv[])
 	// wait for key event
 	cvWaitKey(0);
 
+
+	//src=addContrast(&src,4);
 	/*
-	 * this method segments the input image
-	 *  based on a range of Hue values
-	 *   returns the resluting thresholded image
-	 */
-	hsvThreshOp = hsvThreshold(&src);
+	   * smooth the image
+	   * 	src-> src
+	   */
+
+	cvSmooth(src, src, CV_GAUSSIAN, 7, 7,0,0);
+
+
+	cvCvtColor(src,grayImg,CV_BGR2GRAY);
+	adapThreshOp = adapThresh(&grayImg);
 
 	// display resulting image
-	cvNamedWindow("hsvW",CV_WINDOW_AUTOSIZE);
-	cvShowImage("hsvW",hsvThreshOp);
+	cvNamedWindow("Adaptive Threshold",CV_WINDOW_AUTOSIZE);
+	cvShowImage("Adaptive Threshold",adapThreshOp);
 
 	// wait for key event
 	cvWaitKey(0);
@@ -149,6 +192,7 @@ int main(int argc, char* argv[])
 	// clean up memory...
 	cvDestroyAllWindows();
 	cvReleaseImage(&src);
+	cvReleaseImage(&adapThreshOp);
 
 	return 0;
 

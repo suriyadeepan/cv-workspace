@@ -132,13 +132,13 @@ int main(int argc, char* argv[])
 	cvDestroyWindow("Source");
 */
 
-	// sobelDerivatives(&src);
+	 sobelDerivatives(&src);
 
 	// scharrFilter(&src,1,0,CV_SCHARR);
 
 	// laplacianFilter(&src,3);
 
-	cannyFilter(&src,50,120,3);
+	//cannyFilter(&src,50,120,3);
 
 
 	cvDestroyAllWindows();

@@ -103,6 +103,7 @@ void captureImage(IplImage** img)
 		cvDestroyWindow("Source");
 
 
+
 }
 
 int main(int argc, char* argv[])
@@ -141,6 +142,7 @@ int main(int argc, char* argv[])
 	// clean up memory...
 	cvDestroyAllWindows();
 	cvReleaseImage(&imgFromCam);
+	system("rm 002.avi");
 
 
 	return 0;
