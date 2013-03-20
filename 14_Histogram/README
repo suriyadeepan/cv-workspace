@@ -1,1 +1,16 @@
-Created by RPS Deepan - 07-01-2013
+- main.c
+	[ drawing and rendering histogram ]
+		
+	Created by RPS Deepan - 07-01-2013
+
+		Modified by RPS Deepan - 20-03-2013
+
+		ref:
+  		[http://www.aishack.in/2010/07/drawing-histograms-in-opencv/]
+
+- equalization.c
+	[ equalize histograms of images ]
+
+	Created by RPS Deepan - 20-03-2013
+	ref: 	opencv_tutorials.pdf
+			[Histogram Equalization]

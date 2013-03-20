@@ -1,6 +1,6 @@
 /*
  *	Created by RPS Deepan - 20-03-2013
- *	ref: 	opencv_tutorials.pf
+ *	ref: 	opencv_tutorials.pdf
  *				[Histogram Equalization]
  *
  */
