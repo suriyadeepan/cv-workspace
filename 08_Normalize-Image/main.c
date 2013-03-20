@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	cvStartWindowThread();
 
 	// display original image
-	cvNamedWindow("input",CV_WINDOW_AUTOSIZE);
+	cvNamedWindow("input",CV_WINDOW_NORMAL);
 	cvShowImage("input",src);
 
 	// wait for key press
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 	cvShowImage("normalized",normalizedImg);
 
 	// wait for key press
-	cvWaitKey(0);
+	cvWaitKy(0);
 
 	// release memory
 	cvDestroyWindow("normalized");

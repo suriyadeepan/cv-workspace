@@ -95,7 +95,7 @@ IplImage* hsvThreshold(IplImage** img)
 		 *   this corresponds to light blue
 		 *    found from gimp
 		 */
-		cvInRangeS(hue, cvScalar(174/2, 0, 0,0), cvScalar(186/2, 255, 255,0),hue);
+		cvInRangeS(hue, cvScalar(70/2, 0, 0,0), cvScalar(76/2, 255, 255,0),hue);
 
 	// return resulting thresholded image
 	return hue;
@@ -128,7 +128,7 @@ IplImage* adapThresh(IplImage** img)
 	 *	param1 = 5
 	 */
 
-	cvAdaptiveThreshold(*img,thresh,255,CV_ADAPTIVE_THRESH_GAUSSIAN_C,CV_THRESH_BINARY,3,3);
+	cvAdaptiveThreshold(*img,thresh,255,CV_ADAPTIVE_THRESH_MEAN_C,CV_THRESH_BINARY,3,5);
 
 	return thresh;
 
@@ -164,25 +164,17 @@ int main(int argc, char* argv[])
 	cvNamedWindow("input",CV_WINDOW_AUTOSIZE);
 	cvShowImage("input",src);
 
+
+
 	// wait for key event
 	cvWaitKey(0);
 
 
-	//src=addContrast(&src,4);
-	/*
-	   * smooth the image
-	   * 	src-> src
-	   */
-
-	cvSmooth(src, src, CV_GAUSSIAN, 7, 7,0,0);
-
-
-	cvCvtColor(src,grayImg,CV_BGR2GRAY);
-	adapThreshOp = adapThresh(&grayImg);
+	hsvThreshOp = hsvThreshold(&src);
 
 	// display resulting image
-	cvNamedWindow("Adaptive Threshold",CV_WINDOW_AUTOSIZE);
-	cvShowImage("Adaptive Threshold",adapThreshOp);
+	cvNamedWindow("Hue Threshold",CV_WINDOW_AUTOSIZE);
+	cvShowImage("Hue Threshold",hsvThreshOp);
 
 	// wait for key event
 	cvWaitKey(0);
@@ -192,7 +184,7 @@ int main(int argc, char* argv[])
 	// clean up memory...
 	cvDestroyAllWindows();
 	cvReleaseImage(&src);
-	cvReleaseImage(&adapThreshOp);
+	//cvReleaseImage(&adapThreshOp);
 
 	return 0;
 

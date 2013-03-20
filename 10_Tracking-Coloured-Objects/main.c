@@ -31,7 +31,7 @@ IplImage* hsvThreshold(IplImage** img)
 		 *   this corresponds to light blue
 		 *    found from gimp
 		 */
-		cvInRangeS(hue, cvScalar(148, 0, 0,0), cvScalar(176, 255, 255,0),hue);
+		cvInRangeS(hue, cvScalar(70/2, 0, 0,0), cvScalar(76/2, 255, 255,0),hue);
 
 	// return resulting thresholded image
 	return hue;
@@ -45,12 +45,10 @@ int main(int argc, char* argv[])
 
 
 
-	IplImage* frame=0;
+	IplImage* img=0;
 
-	CvCapture* capture=cvCreateFileCapture("0104.mp4");
-	frame=cvQueryFrame(capture);
 
-	IplImage* threshOp=cvCreateImage(cvGetSize(frame),8,1);
+
 	cvNamedWindow("Detected",CV_WINDOW_NORMAL);
 	cvNamedWindow("Threshold",CV_WINDOW_NORMAL);
 
@@ -59,24 +57,64 @@ int main(int argc, char* argv[])
 		while(1)
 		{
 
-		frame=cvQueryFrame(capture);
+
+			system(" ffmpeg -f video4linux2 -r 25 -s 640x480 -i /dev/video1 -y -t 4 002.avi");
 
 
-		if(!frame)
+
+					CvCapture* capture = 0;
+
+					capture = cvCreateFileCapture("002.avi");
+
+					if(!capture)
+					{
+						return 0;
+					}
+
+					int i=0;
+
+					while(1)
+					{
+
+					img = cvQueryFrame(capture);
+
+					if(!img)
+						break;
+
+
+					i++;
+
+					if(i>10)
+						break;
+
+
+					cvWaitKey(25);
+
+
+
+					}
+
+					cvReleaseCapture(&capture);
+
+
+
+		if(!img)
 		{  // capture a frame
 		    printf("Could not grab a frame\n\7");
 		    exit(0);
 		}
 
+		IplImage* threshOp = cvCreateImage(cvGetSize(img),8,1);
+
 
 		// threshold the src
-		threshOp=hsvThreshold(&frame);
+		threshOp=hsvThreshold(&img);
 		cvShowImage("Threshold",threshOp);
 
 
 		// now we need to find object in the image
 			//  using the concept of moments
-			CvMoments* moments=(CvMoments*)malloc(sizeof(CvMoments));
+			CvMoments* moments = (CvMoments*)malloc(sizeof(CvMoments));
 			cvMoments(threshOp,moments,1);
 
 			// calculate moment values
@@ -98,11 +136,11 @@ int main(int argc, char* argv[])
 			pt.x=(int)posX;
 			pt.y=(int)posY;
 
-			cvCircle( frame, pt, 22, CV_RGB(255,0,0), -1,8,0 );
+			cvCircle( img, pt, 22, CV_RGB(255,0,0), -1,8,0 );
 
 
 
-		cvShowImage("Detected",frame);
+		cvShowImage("Detected",img);
 
 	    char c = cvWaitKey(100);
 	    if( c == 27 || c=='q') break;
@@ -132,8 +170,8 @@ int main(int argc, char* argv[])
 
 
 	cvDestroyAllWindows();
-	cvReleaseImage(&frame);
-	cvReleaseImage(&threshOp);
+	cvReleaseImage(&img);
+
 
 	return 0;
 

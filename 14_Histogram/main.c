@@ -1,12 +1,63 @@
 /*
  *	Created by RPS Deepan - 07-01-2013
  *
+ *		Modified by RPS Deepan - 20-03-2013
+ *		ref:
+ *  		[http://www.aishack.in/2010/07/drawing-histograms-in-opencv/]
  */
 
 
 #include<stdio.h>
 #include<cv.h>
 #include<highgui.h>
+
+IplImage* drawHistogram(CvHistogram* hist)
+{
+	// Scale
+	int scaleX = 2;
+	int scaleY = 2;
+
+
+	float histMax = 0;
+
+	cvGetMinMaxHistValue(hist, 0, &histMax, 0, 0);
+
+	// create blank image
+	IplImage* imgHist = cvCreateImage(cvSize(256*scaleX, 64*scaleY), 8 ,1);
+	cvZero(imgHist);
+
+
+	// iterate thro' bins and render out graphics...
+	int i=0;
+	for(i=0;i<255;i++)
+	    {
+	        float histValue = cvQueryHistValue_1D(hist, i);
+	        float nextValue = cvQueryHistValue_1D(hist, i+1);
+
+	        CvPoint pt1 = cvPoint(i*scaleX, 64*scaleY);
+	        CvPoint pt2 = cvPoint(i*scaleX+scaleX, 64*scaleY);
+	        CvPoint pt3 = cvPoint(i*scaleX+scaleX, (64-nextValue*64/histMax)*scaleY);
+	        CvPoint pt4 = cvPoint(i*scaleX, (64-histValue*64/histMax)*scaleY);
+
+	        int numPts = 5;
+	        CvPoint pts[] = {pt1, pt2, pt3, pt4, pt1};
+
+	        cvFillConvexPoly(imgHist, pts, numPts, cvScalar(255,0,0,0),8,0);
+	    }
+
+
+
+
+
+
+	return imgHist;
+
+
+}
+
+/*
+ * 	---------- MAIN -----------
+ */
 
 int main(int argc, char* argv[])
 {
@@ -16,83 +67,47 @@ int main(int argc, char* argv[])
 	IplImage* hsvSrc = cvCreateImage(cvGetSize(src),8,3);
 	cvCvtColor(src,hsvSrc,CV_BGR2HSV);
 
-
-	// seperate hsv image into 3 channels
-	IplImage* hPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
-	IplImage* sPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
-	IplImage* vPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
-	IplImage* dPlane = cvCreateImage(cvGetSize(hsvSrc),8,1);
-	IplImage* planes[] = {hPlane,sPlane};
-
-	cvSplit(hsvSrc,hPlane,sPlane,vPlane,dPlane);
-
-	// Build histogram
-	int hBins = 30, sBins = 32;
-
-	// setup hist
-	CvHistogram* hist;
-	
-		// sizes of each dimension's bins
-		int histSize[] = { hBins, sBins };
-
-		// individual dimension ranges
-		// hue => 0 - 180
-		float hRanges[] = { 0,180 };
-		// sat => 0 - 255
-		float sRanges[] = { 0,255 };
-
-		// ranges
-		float* ranges[] = { hRanges, sRanges };
-
-		// create histogram
-		hist = cvCreateHist(2,histSize,CV_HIST_ARRAY,ranges,1);
-
-	// end of histogram DS hist
-
-	// Compute Histogram
-	cvCalcHist(planes,hist,0,0);
-
-	// Normalize Histogram
-	cvNormalizeHist(hist,1.0);
+	// initialize Histogram
+	int numBins = 256;
+    	CvHistogram *hist = cvCreateHist(1,&numBins,CV_HIST_ARRAY,NULL,1);
+    	cvClearHist(hist);
 
 
-	// create an image to Visualize Histogram
-	int scale = 10;
-	IplImage* histImg = cvCreateImage(cvSize(hBins*scale,sBins*scale),8,3);
-	cvZero(histImg);
+	// Separate hsv image into 3 channels
+	IplImage* hueCh = cvCreateImage(cvGetSize(hsvSrc),8,1);
+	IplImage* satCh = cvCreateImage(cvGetSize(hsvSrc),8,1);
+	IplImage* valCh = cvCreateImage(cvGetSize(hsvSrc),8,1);
 
-	// get max value
-	float maxValue = 0;
-	cvGetMinMaxHistValue(hist,0,&maxValue,0,0);
+		cvSplit(hsvSrc,hueCh,satCh,valCh,NULL);
 
-	/*
-	 *  iterate thro' each bin, find
-	 *   bin values - calculate intensity
-	 *    draw rectangle with that (color) intensity
-	 */
-	int h=0;
-	int s=0;
 
-	for(h=0; h < hBins; h++)
-	{
-		for(s=0; s < sBins; s++)
-		{
-			// get bin value
-			float binVal = cvQueryHistValue_2D(hist,h,s);
-			int intensity = cvRound((binVal/maxValue)*255);
-			cvRectangle(histImg,cvPoint(h*scale,s*scale),
-					cvPoint((h+1)*scale,(s+1)*scale),
-					CV_RGB(intensity,intensity,intensity),-1,8,0);
-		}
-	}
+	// **** Rendering Histogram ****
+
+	// --- Hue Channel ---
+	cvCalcHist(&hueCh,hist, 0, NULL);
+		IplImage* imgHistHue = drawHistogram(hist);
+		cvClearHist(hist);
+
+	// --- Sat Channel ---
+	cvCalcHist(&satCh, hist, 0, NULL);
+	IplImage* imgHistSat = drawHistogram(hist);
+		cvClearHist(hist);
+
+	// --- Val Channel ---
+	cvCalcHist(&valCh, hist, 0, NULL);
+		IplImage* imgHistVal = drawHistogram(hist);
+		cvClearHist(hist);
 
 	cvStartWindowThread();
 
 	// display histogram
-	cvNamedWindow("Hist",CV_WINDOW_FULLSCREEN);
-	cvShowImage("Hist",histImg);
+	cvNamedWindow("Hue",CV_WINDOW_NORMAL);
+	cvNamedWindow("Sat",CV_WINDOW_NORMAL);
+	cvNamedWindow("Val",CV_WINDOW_NORMAL);
 
-
+	cvShowImage("Hue",imgHistHue);
+	cvShowImage("Sat",imgHistSat);
+	cvShowImage("Val",imgHistVal);
 
 
 	// wait for key press
@@ -101,12 +116,14 @@ int main(int argc, char* argv[])
 	// release memory
 	cvDestroyAllWindows();
 	cvReleaseImage(&src);
-	cvReleaseImage(&hPlane);
-	cvReleaseImage(&sPlane);
-	cvReleaseImage(&vPlane);
-	cvReleaseImage(&dPlane);
-	cvReleaseImage(&hsvSrc);
-	cvReleaseImage(&histImg);
+
+	cvReleaseImage(&hueCh);
+	cvReleaseImage(&satCh);
+	cvReleaseImage(&valCh);
+
+	cvReleaseImage(&imgHistHue);
+	cvReleaseImage(&imgHistSat);
+	cvReleaseImage(&imgHistVal);
 
 	return 0;
 }// end of main

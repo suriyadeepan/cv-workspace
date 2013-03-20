@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
 
 	// do hough circle transform
 	circles = cvHoughCircles(src,storage,CV_HOUGH_GRADIENT,2,
-			10,200,100,5,130);
+			10,200,100,5,500);
 
 	// index variable for iterating thro' circles
 	int i=0;
