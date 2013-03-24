@@ -48,101 +48,68 @@ IplImage* invertImg(IplImage** img)
 	return *img;
 }
 
-void captureImage(IplImage** img)
-{
-	system("rm 002.avi");
-	system(" ffmpeg -f video4linux2 -r 25 -s 640x480 -i /dev/video1 -y -t 4 002.avi");
+// ----NOTE----
+
+/*
+ * use of ffmpeg for recording video using webcam
+ *  then iterate thro' frames and pick a frame
+ *   - i => device node
+ *   - y => overwrite file
+ *   - f => v4l2
+ *   - s => size
+ *   - t => time of recording
+ *
+ */
 
 
 
-		CvCapture* capture = 0;
-
-		capture = cvCreateFileCapture("002.avi");
-
-		if(!capture)
-		{
-			return;
-		}
-
-
-
-
-
-		int i=0;
-		while(1)
-		{
-
-		*img = cvQueryFrame(capture);
-
-		if(!*img)
-			break;
-
-
-		i++;
-
-		if(i>10)
-			break;
-
-
-		cvWaitKey(25);
-
-
-
-		}
-
-
-
-		cvNamedWindow("Source",CV_WINDOW_AUTOSIZE);
-			cvShowImage("Source",*img);
-
-			cvWaitKey(0);
-
-
-		// release capture
-		cvReleaseCapture(&capture);
-		cvDestroyWindow("Source");
-
-
-
-}
 
 int main(int argc, char* argv[])
 {
-	/*
-	 * use of ffmpeg for recording video using webcam
-	 *  then iterate thro' frames and pick a frame
-	 *   - i => device node
-	 *   - y => overwrite file
-	 *   - f => v4l2
-	 *   - s => size
-	 *   - t => time of recording
-	 *
-	 */
 
-	IplImage* imgFromCam = 0;
 
+	IplImage* frame;
+
+
+
+
+	// a video capture obj
+	CvCapture* capture = 0;
+	capture = cvCreateFileCapture(argv[1]);
+
+	// if its null
+	if(!capture)
+	{
+		printf("capture obj is null!");
+		return -1;
+	}
+
+
+	// window
 	cvStartWindowThread();
+	cvNamedWindow("Source",CV_WINDOW_AUTOSIZE);
 
-	captureImage(&imgFromCam);
+	// iterate thro' all the frames
+	while(1)
+	{
+
+		frame = cvQueryFrame(capture);
+
+		if(!frame)
+			break;
+
+		// a small delay
+		cvWaitKey(40);
+
+		cvShowImage("Source",frame);
+
+	}
 
 
-	cvNamedWindow("Source1",CV_WINDOW_AUTOSIZE);
-	cvShowImage("Source1",imgFromCam);
-
-
-
-
-
-
-	// wait for key event
-	cvWaitKey(0);
-
-
-
-	// clean up memory...
-	cvDestroyAllWindows();
-	cvReleaseImage(&imgFromCam);
-	system("rm 002.avi");
+	// release capture
+	cvReleaseCapture(&capture);
+	cvDestroyWindow("Source");
+	cvReleaseImage(&frame);
 
 
 	return 0;

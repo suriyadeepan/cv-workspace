@@ -1,3 +1,4 @@
+--- main.c ---
 Created by RPS Deepan- 31/12/2012
         - added a method addBrightness()
            to increase overall brightness of img
@@ -8,10 +9,16 @@ Modified by RPS Deepan- 31/12/2012
             constrast by a factor(double)
         - added a method to invert image
 
-Modified by RPS Deepan- 02/01/2012
+Modified by RPS Deepan- 02/01/2013
         - modified the main function to
            play an avi file frame by frame
             with varying contrasts and brightness
         - need to make this code chunk in main 
            into a proper method...
 
+--- read-from-vid.c ---
+Created by RPS Deepan- 31/12/2012
+		- plays an avi file
+		
+		
+	
