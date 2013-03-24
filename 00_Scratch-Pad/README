@@ -21,4 +21,9 @@ Created by RPS Deepan- 31/12/2012
 		- plays an avi file
 		
 		
+--- contours-on-vid.c ---
+Created by RPS Deepan- 31/12/2012
+		- iterates thro' frames of a vid
+			finds contours in each frame
+				
 	
