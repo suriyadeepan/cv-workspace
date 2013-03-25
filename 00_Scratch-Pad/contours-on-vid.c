@@ -31,6 +31,19 @@ void contourDetect(IplImage** img)
 	  IplImage* imgGray = cvCreateImage(cvGetSize(*img), 8, 1);
 	  	  cvCvtColor(*img, imgGray, CV_BGR2GRAY);
 
+	/*
+	// Binary Thresholding
+	  cvAdaptiveThreshold ( imgGray,imgGray, 255,
+	  						    CV_ADAPTIVE_THRESH_GAUSSIAN_C,
+	  							CV_THRESH_BINARY, 35, 25 );
+	*/
+
+	// apply canny
+	  cvCanny(imgGray,imgGray,10,10,3);
+
+
+
+
 
 	// find all contours in temp and
 	//  store them in contours
