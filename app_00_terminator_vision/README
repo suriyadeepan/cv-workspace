@@ -1,0 +1,22 @@
+Expt by RPS Deepan - 09/05/2013
+
+- Terminator Vision
+	[ inspired by TSCC ]
+
+- primatry Objectives
+	- face detection
+	- face recognition
+	- object identification
+		[ colour based ]
+	- feature detection
+
+- Secondary Objectives
+	- online learning 
+	  - based on colour, features
+	- object selection on screen
+
+- Features
+	- red terminator theme
+	- HUD like display
+	- on-screen info about selected objects
+	 
