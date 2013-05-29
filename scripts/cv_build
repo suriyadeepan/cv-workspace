@@ -1,3 +1,12 @@
+#
+#Created by RPS Deepan - 29/05/2013
+#
+# - gets input file (c / c++) , output filename
+#    as input
+# - compiles them into an executable binary with 
+#    output filename provided by user
+#
+
 # get the arguments
 file_name=$1
 op_file_name=$2
