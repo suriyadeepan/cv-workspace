@@ -1,0 +1,17 @@
+Expt by RPS Deepan- 29/12/2012
+  Loads a image and perform specific
+  	  morphological operations over the image
+Modified by RPS Deepan- 02/01/2013
+  modified to test morphological operations on
+   an image hue-thresholded from the source image
+    for filtering noise
+
+Morphological Operations:
+
+1.open
+2.close
+3.dilate
+4.erode
+5.blackhat
+6.tophat
+7.gradient
