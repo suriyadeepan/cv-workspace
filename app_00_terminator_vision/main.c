@@ -1,4 +1,4 @@
-#include <stdio.h>	// For printf()
+#include <stdio.h>
 #include <cv.h>		// Main OpenCV library.
 #include <highgui.h>	// OpenCV functions for files and graphical windows.
 
@@ -7,7 +7,7 @@ IplImage* optimizeColor(IplImage* col_in,int divisor)
 {
 	int width = col_in->width, height = col_in->height,x,y;
 	IplImage* col_out = cvCreateImage(cvGetSize(col_in),8,1);
-//	printf("\n\n");
+
 	for(x=0;x<width;x++)
 	{
 		for(y=0;y<height;y++)

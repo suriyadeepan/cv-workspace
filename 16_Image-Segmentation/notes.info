@@ -1,0 +1,34 @@
+
+* obj:
+	- isolate objs or parts of objs from rest of image
+	- background => boring; foreground object => interest
+	- need parts of objects sometimes => eg: face
+	- super pixels => meaningful segments of image
+	
+
+* Background Subtraction:
+	- learn a bg model, compare model vs current image,
+		subtract bg parts, result => fg objs
+	- bg => static or periodically moving parts of scene
+	- "codebook" method
+	- concept of connected components
+
+* Weakness of bg subtraction:
+	- independent pixel model    
+	- neighbourhood pixels not considered
+ 	- a multipart model <= extension of independent model
+		- surrounding context is taken into account
+		- relative brightness of the neigh. pixels
+		- increased computation
+
+* Scene Modelling
+	- need a complex higher level scene model  
+	   multiple levels b/w fg and bg states
+	   timing based method of regulating unmoving fg patches to 
+	    bg patches
+	- detect, create new model <= global change
+	- motion detection
+	- global frame differencing <= many pixels change @ once
+	  
+* A Slice of Pixels
+	-  	
