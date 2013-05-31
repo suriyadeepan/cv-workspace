@@ -108,7 +108,7 @@ void red_theme_test(IplImage* img)
 
 
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[], IplImage* prev1)
 {
 	// load an image from file
 	IplImage* src=cvLoadImage(argv[1],CV_LOAD_IMAGE_UNCHANGED);

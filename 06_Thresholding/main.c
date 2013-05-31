@@ -95,7 +95,7 @@ IplImage* hsvThreshold(IplImage** img)
 		 *   this corresponds to light blue
 		 *    found from gimp
 		 */
-		cvInRangeS(hue, cvScalar(70/2, 0, 0,0), cvScalar(76/2, 255, 255,0),hue);
+		cvInRangeS(hue, cvScalar(5, 136, 88,0), cvScalar(35, 255, 255,0),hue);
 
 	// return resulting thresholded image
 	return hue;

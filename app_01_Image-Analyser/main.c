@@ -165,7 +165,7 @@ int applyMask(int x,int y)
 }
 
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[], IplImage* prev1)
 {
 		src = cvLoadImage(argv[1],CV_LOAD_IMAGE_GRAYSCALE);
 

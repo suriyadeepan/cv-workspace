@@ -36,7 +36,7 @@ IplImage* adapThresh(IplImage* img)
 
 
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[], IplImage* prev1)
 {
 	IplImage* src = cvLoadImage(argv[1],CV_LOAD_IMAGE_GRAYSCALE);
 	IplImage* threshImg = cvCreateImage(cvGetSize(src), 8, 1);

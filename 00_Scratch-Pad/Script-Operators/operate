@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+#
+# 	Created by RPS Deepan 30-05-2013
+#
+while :
+do
+	echo -n ">> "
+	read cmd 
+	./$cmd.o 
+done
+
+exit
