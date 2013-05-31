@@ -50,7 +50,7 @@ void splitImagesHSV()
 	sImg = cvCreateImage(cvGetSize(src),8,1);
 	vImg = cvCreateImage(cvGetSize(src),8,1);
 
-	cvSplit(src,hImg,sImg,vImg,NULL);
+	cvSplit(hsvImg,hImg,sImg,vImg,NULL);
 
 }
 
