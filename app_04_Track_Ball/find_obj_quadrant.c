@@ -1,4 +1,5 @@
-Expt by RPS Deepan- 16/06/2013
+/*
+ * Expt by RPS Deepan- 16/06/2013
     the program iterates thro' a video - frame by frame
     thresholds each frame for finding the object location
     finds the postion of object and draws a rectangle over 
@@ -9,7 +10,7 @@ Modified by RPS Deepan- 17/06/2013
     made the indentations proper
     still need to modify the code to work
      efficiently
-
+*/
 
 #include <cv.h>
 #include <highgui.h>
