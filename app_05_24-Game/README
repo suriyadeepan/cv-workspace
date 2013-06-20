@@ -1,0 +1,7 @@
+* 24 Game:
+   An arithmetical card game
+    the objective is to find a way to manipulate four integers so that the end result is 24
+     +, -, *, / and sometimes other operations => to make four digits from one to nine equal 24
+
+   eg: card with the numbers 4,7,8,8, a possible solution is the following: (7-(8/8))*4=24.
+
