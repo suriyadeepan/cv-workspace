@@ -1,4 +1,5 @@
 *.o
+*.out
 *~
 ext-res/
 *.mp4
