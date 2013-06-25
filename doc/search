@@ -1,0 +1,61 @@
+#!/usr/bin/bash
+
+# arguments
+#  pattern
+pattern="$1"
+
+# a temp file to store info
+data_file='.search_temp'
+
+# check for no of arguments
+#  based on it, use pdfgrep 
+{
+if [ $# -eq 1 ]
+then	
+	pdfgrep -R -n -i -H "$pattern" *.pdf 
+	echo `pdfgrep -R -n -i -H "$pattern" *.pdf | awk -F : {'print $1, $2'}` > $data_file 
+elif [ $# -eq 2 ]
+then
+	# get 2nd argument as file name
+	file_patt="$2"
+	pdfgrep -R -n -i -H "$pattern" *$file_patt*[.pdf] 
+	echo `pdfgrep -R -n -i -H "$pattern" *$file_patt*[.pdf] | awk -F : {'print $1, $2'}` > $data_file 
+
+else
+	# print error msg
+	echo
+	echo Error : Wrong Usage
+	echo Usage: ./search pattern file_name_pattern
+	echo Usage: ./search pattern
+	echo
+	exit
+
+fi # end of if statement
+}
+
+# use awk to fetch filename and page index
+#  from string output of pdfgrep
+#{
+
+#	file_name=`cat $pg_op | awk -F : '{print $1}'` 
+
+#}
+
+
+# 
+#	EEGG
+#{
+# Open pdf document with page number
+#evince --page-index=5 VideoCapture.pdf 
+#}
+#
+#{
+# Check if a program/utility exists 
+#var=1
+#type pdfgrep >> /dev/null 2>&1 || var=0
+#echo $var
+#}
+#
+#
+exit
+
