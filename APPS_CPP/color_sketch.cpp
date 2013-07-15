@@ -11,11 +11,15 @@ Mat applyColorSketch(Mat frame)
 {	
 	Mat filtered,temp;	
 
-	for(int i=0;i<7;i++)
+/*	for(int i=0;i<7;i++)
 	{
 		bilateralFilter(frame,temp,FILTER_KERNEL_SIZE,SIGMA_COLOR,SIGMA_SPACE);
 		bilateralFilter(temp,filtered,FILTER_KERNEL_SIZE,SIGMA_COLOR,SIGMA_SPACE);
 	}
+
+	*/
+	//GaussianBlur(frame,filtered,Size(3,3),0,0,BORDER_DEFAULT);
+	medianBlur(frame,filtered,15);
 
 	Mat mask;
 
@@ -78,7 +82,7 @@ int main(int argc,char *argv[])
 		imshow("Color Sketch",applyColorSketch(crop(vidFrame,IMAGE_RESIZE_FACTOR) ) );
 
 		// wait for time "delay", check for user key input
-		if((char)waitKey(2)=='q')
+		if((char)waitKey(delay)=='q')
 			stop=true;
 
 	}
