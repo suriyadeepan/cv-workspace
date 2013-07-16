@@ -7,13 +7,18 @@
 using namespace std;
 using namespace cv;
 
+// file name of classifier data
 String face_cascade_file = "file1.xml";
+
+// classifier instance
 CascadeClassifier face_cascade;
 
-
+// detect faces here
 Mat detect(Mat im){
 
 	Mat gray;
+
+	// get a copy of frame
 	Mat result= im.clone();
 
 	// a vector to hold the detected faces
