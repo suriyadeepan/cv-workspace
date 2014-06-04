@@ -1,0 +1,13 @@
+
+[ ] Train Model to detect typical Indian vehicles 
+    [ ] Capture multiple positive, negative pictures for training
+    [ ] Training the model with a high configuration system
+        - available : 8GB RAM, i7, NVIDEA Optimus series GPU
+        - estimated time : 30 minutes to train
+        - use of "traincascades", "TBB"
+
+* Ref
+
+link [http://stackoverflow.com/questions/7230779/why-create-your-own-haar-classifier-cascades]
+link [https://groups.google.com/forum/#!topic/android-opencv/wgcNL-PfGpM]
+

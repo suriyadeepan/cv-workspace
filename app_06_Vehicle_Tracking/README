@@ -1,0 +1,14 @@
+
+* Reference
+
+    My code uses Andrews Sobral's Vehicle Detection Haar Cascade "cars3.xml". The sample video for testing the code is also acquired from his "Vehicle Detection, Tracking and Counting" project. 
+
+link[http://www.behance.net/gallery/4057777/Vehicle-Detection-Tracking-and-Counting]
+
+* Compile code
+    
+    $ ./compile vehicle_vid.cpp
+
+* Run 
+
+    $ ./binary video2.avi
