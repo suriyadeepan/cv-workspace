@@ -1,6 +1,7 @@
 *.o
 *.out
 *~
+*.exe
 ext-res/
 *.mp4
 images/
